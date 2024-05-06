@@ -70,6 +70,16 @@ const tabs = [
   { type: "time", text: "最新" },
 ];
 
+function getFormattedTime() {
+  const date = new Date();
+  const year = date.getFullYear().toString();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0"); // 月份从 0 开始，所以 +1
+  const day = date.getDate().toString().padStart(2, "0");
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
 const App = () => {
   const [commentList, setCommentList] = useState(
     defaultList.sort((itemA, itemB) => {
@@ -83,6 +93,7 @@ const App = () => {
     }),
   );
   const [tabType, setTabType] = useState("time");
+  const [inputComment, setInputComment] = useState("");
   return (
     <div className="app">
       {/* 导航 Tab */}
@@ -147,10 +158,41 @@ const App = () => {
             <textarea
               className="reply-box-textarea"
               placeholder="发一条友善的评论"
+              value={inputComment}
+              onChange={(event) => {
+                setInputComment(event.target.value);
+              }}
             />
             {/* 发布按钮 */}
             <div className="reply-box-send">
-              <div className="send-text">发布</div>
+              <div
+                className="send-text"
+                onClick={() => {
+                  if (inputComment && inputComment.trim().length > 0) {
+                    console.log("111" + inputComment);
+                    setCommentList([
+                      {
+                        rpid: Math.floor(Math.random() * 1001), // 评论id
+                        content: inputComment,
+                        ctime: getFormattedTime(), // 评论时间
+                        like: 0,
+                        user: {
+                          uid: "30009257", // 用户id
+                          avatar, // 用户头像
+                          uname: "黑马前端", // 用户昵称
+                        },
+                      },
+                      ...commentList,
+                    ]);
+                    setInputComment("");
+                    setTabType("time");
+                  } else {
+                    console.log("222" + inputComment);
+                  }
+                }}
+              >
+                发布
+              </div>
             </div>
           </div>
         </div>
