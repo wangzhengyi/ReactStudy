@@ -6,7 +6,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.5.1",
+    "axios": "^1.6.8",
     "classnames": "^2.5.1",
     "dayjs": "^1.11.10",
     "lodash": "^4.17.21",
@@ -19,7 +19,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "server": "json-server db.json --port 3004"
   },
   "eslintConfig": {
     "extends": [
@@ -40,7 +41,7 @@
     ]
   },
   "devDependencies": {
-    "json-server": "^0.17.3",
+    "json-server": "^0.17.4",
     "prettier": "^3.2.5"
   }
 }
