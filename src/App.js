@@ -1,7 +1,8 @@
 import "./App.scss";
 import avatar from "./images/bozai.png";
-import { useState } from "react";
+import React, { useRef, useState } from "react";
 import classNames from "classnames";
+import { v4 as uuidV4 } from "uuid";
 
 /**
  * 评论列表的渲染和操作
@@ -80,7 +81,26 @@ function getFormattedTime() {
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
 
-const App = () => {
+function generateComment(inputComment) {
+  const comment = {
+    rpid: uuidV4(), // 评论id
+    content: inputComment,
+    ctime: getFormattedTime(), // 评论时间
+    like: 0,
+    user: {
+      uid: "30009257", // 用户id
+      avatar, // 用户头像
+      uname: "黑马前端", // 用户昵称
+    },
+  };
+
+  console.log(comment);
+
+  return comment;
+}
+
+function App() {
+  const textArea = useRef(null);
   const [commentList, setCommentList] = useState(
     defaultList.sort((itemA, itemB) => {
       if (itemB.ctime > itemA.ctime) {
@@ -156,6 +176,7 @@ const App = () => {
           <div className="reply-box-wrap">
             {/* 评论框 */}
             <textarea
+              ref={textArea}
               className="reply-box-textarea"
               placeholder="发一条友善的评论"
               value={inputComment}
@@ -171,21 +192,13 @@ const App = () => {
                   if (inputComment && inputComment.trim().length > 0) {
                     console.log("111" + inputComment);
                     setCommentList([
-                      {
-                        rpid: Math.floor(Math.random() * 1001), // 评论id
-                        content: inputComment,
-                        ctime: getFormattedTime(), // 评论时间
-                        like: 0,
-                        user: {
-                          uid: "30009257", // 用户id
-                          avatar, // 用户头像
-                          uname: "黑马前端", // 用户昵称
-                        },
-                      },
+                      generateComment(inputComment),
                       ...commentList,
                     ]);
                     setInputComment("");
                     setTabType("time");
+                    textArea.current.focus();
+                    console.log(textArea);
                   } else {
                     console.log("222" + inputComment);
                   }
@@ -249,6 +262,6 @@ const App = () => {
       </div>
     </div>
   );
-};
+}
 
 export default App;
